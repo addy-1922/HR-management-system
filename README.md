@@ -4,7 +4,7 @@ A web-based **Human Resource Management System** built with **Python and Django*
 
 ## 🚀 Live Demo
 
-🔗 **[HR Management System](https://hr2-i98d.onrender.com/)**
+🔗 **[HR Management System](https://hr2-i98d.onrender.com/ )**
 
 ## 📌 Project Overview
 

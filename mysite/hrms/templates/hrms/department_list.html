@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Departments{% endblock %}
+{% block page_title %}Departments{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-diagram-3 me-1"></i> Departments</span>
+        <a href="{% url 'department_create' %}" class="btn btn-sm btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Add Department
+        </a>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Employees</th>
+                <th>Created</th>
+                <th class="text-end">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for department in departments %}
+                <tr>
+                    <td class="fw-semibold">{{ department.name }}</td>
+                    <td>{{ department.description|truncatechars:80|default:"--" }}</td>
+                    <td>
+                        <span class="badge text-bg-light">{{ department.total }} employee{{ department.total|pluralize }}</span>
+                    </td>
+                    <td class="text-muted small">{{ department.created_at|date:"M d, Y" }}</td>
+                    <td class="text-end text-nowrap">
+                        <a href="{% url 'department_update' department.pk %}" class="btn btn-sm btn-outline-secondary" title="Edit">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="{% url 'department_delete' department.pk %}" class="btn btn-sm btn-outline-danger" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-5">
+                        <i class="bi bi-inbox" style="font-size: 2rem;"></i>
+                        <p class="mt-2 mb-0">No departments yet. Click "Add Department" to create one.</p>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

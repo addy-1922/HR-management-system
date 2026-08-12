@@ -1,0 +1,26 @@
+{% extends 'hrms/form.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block form_width %}7{% endblock %}
+{% block cancel_url %}{% url 'attendance_list' %}{% endblock %}
+
+{% block form_fields %}
+    <div class="mb-3">
+        {% include 'hrms/partials/_form_field.html' with field=form.employee %}
+    </div>
+    <div class="mb-3">
+        {% include 'hrms/partials/_form_field.html' with field=form.date %}
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            {% include 'hrms/partials/_form_field.html' with field=form.check_in %}
+        </div>
+        <div class="col-md-6 mb-3">
+            {% include 'hrms/partials/_form_field.html' with field=form.check_out %}
+        </div>
+    </div>
+    <div class="mb-3">
+        {% include 'hrms/partials/_form_field.html' with field=form.status %}
+    </div>
+{% endblock %}

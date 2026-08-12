@@ -1,0 +1,21 @@
+{% if page_obj.has_other_pages %}
+    <nav aria-label="Table navigation" class="mt-3">
+        <ul class="pagination justify-content-center mb-0">
+            {% with qs=querystring.urlencode %}
+            <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if qs %}&{{ qs }}{% endif %}"
+                   {% if not page_obj.has_previous %}tabindex="-1"{% endif %}>&laquo;</a>
+            </li>
+            {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}{% if qs %}&{{ qs }}{% endif %}">{{ num }}</a>
+                </li>
+            {% endfor %}
+            <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if qs %}&{{ qs }}{% endif %}"
+                   {% if not page_obj.has_next %}tabindex="-1"{% endif %}>&raquo;</a>
+            </li>
+            {% endwith %}
+        </ul>
+    </nav>
+{% endif %}

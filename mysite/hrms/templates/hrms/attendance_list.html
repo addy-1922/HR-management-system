@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Attendance{% endblock %}
+{% block page_title %}Attendance{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <span><i class="bi bi-clock-history me-1"></i> Attendance Records</span>
+        <a href="{% url 'attendance_create' %}" class="btn btn-sm btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Record Attendance
+        </a>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-2 mb-3">
+            <div class="col-6 col-md-3">
+                <input type="date" name="date" value="{{ filter_date }}" class="form-control">
+            </div>
+            <div class="col-6 col-md-3">
+                <select name="status" class="form-select">
+                    <option value="">All Status</option>
+                    {% for status in attendance_statuses %}
+                        <option value="{{ status }}" {% if filter_status == status %}selected{% endif %}>{{ status }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12 col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Apply</button>
+                {% if filter_date or filter_status %}
+                    <a href="{% url 'attendance_list' %}" class="btn btn-outline-secondary">Clear</a>
+                {% endif %}
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>Date</th>
+                    <th>Check-in</th>
+                    <th>Check-out</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for record in attendance %}
+                    <tr>
+                        <td class="fw-semibold">{{ record.employee.full_name }}
+                            <span class="text-muted small d-block">{{ record.employee.employee_id }}</span>
+                        </td>
+                        <td>{{ record.date }}</td>
+                        <td>{{ record.check_in|default:"--" }}</td>
+                        <td>{{ record.check_out|default:"--" }}</td>
+                        <td>{% include 'hrms/partials/_badge.html' with value=record.status %}</td>
+                        <td class="text-end text-nowrap">
+                            <a href="{% url 'attendance_update' record.pk %}" class="btn btn-sm btn-outline-secondary" title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'attendance_delete' record.pk %}" class="btn btn-sm btn-outline-danger" title="Delete">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-5">
+                            <i class="bi bi-inbox" style="font-size: 2rem;"></i>
+                            <p class="mt-2 mb-0">No attendance records found.</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% include 'hrms/partials/_pagination.html' %}
+    </div>
+</div>
+{% endblock %}

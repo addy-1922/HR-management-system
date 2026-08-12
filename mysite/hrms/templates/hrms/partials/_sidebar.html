@@ -1,0 +1,33 @@
+{% load custom_filters %}
+<aside class="sidebar">
+    <div class="sidebar-brand"><i class="bi bi-person-badge"></i> HRMS</div>
+    <nav class="sidebar-nav">
+        <a href="{% url 'dashboard' %}"
+           class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+            <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+        </a>
+        {% if user.is_staff %}
+        <a href="{% url 'employee_list' %}"
+           class="{% if request.resolver_match.url_name|startswith:'employee' %}active{% endif %}">
+            <i class="bi bi-people"></i> <span>Employees</span>
+        </a>
+        <a href="{% url 'department_list' %}"
+           class="{% if request.resolver_match.url_name|startswith:'department' %}active{% endif %}">
+            <i class="bi bi-diagram-3"></i> <span>Departments</span>
+        </a>
+        {% endif %}
+        <a href="{% url 'leave_list' %}"
+           class="{% if request.resolver_match.url_name|startswith:'leave' %}active{% endif %}">
+            <i class="bi bi-calendar2-check"></i> <span>Leaves</span>
+        </a>
+        {% if user.is_staff %}
+        <a href="{% url 'attendance_list' %}"
+           class="{% if request.resolver_match.url_name|startswith:'attendance' %}active{% endif %}">
+            <i class="bi bi-clock-history"></i> <span>Attendance</span>
+        </a>
+        {% endif %}
+    </nav>
+    <div class="sidebar-footer small">
+        <i class="bi bi-shield-lock me-1"></i> HR Management System
+    </div>
+</aside>

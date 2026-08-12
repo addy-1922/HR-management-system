@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Employees{% endblock %}
+{% block page_title %}Employees{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <span><i class="bi bi-people me-1"></i> Employee List</span>
+        <a href="{% url 'employee_create' %}" class="btn btn-sm btn-primary">
+            <i class="bi bi-plus-lg me-1"></i> Add Employee
+        </a>
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-2 mb-3">
+            <div class="col-12 col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" name="q" value="{{ search }}" class="form-control"
+                           placeholder="Search by name, ID, email or designation...">
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <select name="department" class="form-select">
+                    <option value="">All Departments</option>
+                    {% for dept in departments %}
+                        <option value="{{ dept.pk }}" {% if filter_department == dept.pk|stringformat:"s" %}selected{% endif %}>
+                            {{ dept.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-6 col-md-2">
+                <select name="status" class="form-select">
+                    <option value="">All Status</option>
+                    {% for status in employee_statuses %}
+                        <option value="{{ status }}" {% if filter_status == status %}selected{% endif %}>{{ status }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-12 col-md-2 d-flex gap-2">
+                <button type="submit" class="btn btn-primary w-100">Apply</button>
+                {% if search or filter_department or filter_status %}
+                    <a href="{% url 'employee_list' %}" class="btn btn-outline-secondary">Clear</a>
+                {% endif %}
+            </div>
+        </form>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                <tr>
+                    <th>Employee</th>
+                    <th>ID</th>
+                    <th>Department</th>
+                    <th>Designation</th>
+                    <th>Status</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for employee in employees %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                {% if employee.profile_photo %}
+                                    <img src="{{ employee.profile_photo.url }}" alt="{{ employee.full_name }}" class="avatar">
+                                {% else %}
+                                    <div class="avatar avatar-placeholder d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-person"></i>
+                                    </div>
+                                {% endif %}
+                                <div>
+                                    <div class="fw-semibold">{{ employee.full_name }}</div>
+                                    <div class="text-muted small">{{ employee.email }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ employee.employee_id }}</td>
+                        <td>{% if employee.department %}{{ employee.department.name }}{% else %}<span class="text-muted">--</span>{% endif %}</td>
+                        <td>{{ employee.designation }}</td>
+                        <td>{% include 'hrms/partials/_badge.html' with value=employee.employment_status %}</td>
+                        <td class="text-end text-nowrap">
+                            <a href="{% url 'employee_detail' employee.pk %}" class="btn btn-sm btn-outline-primary" title="View">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a href="{% url 'employee_update' employee.pk %}" class="btn btn-sm btn-outline-secondary" title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'employee_delete' employee.pk %}" class="btn btn-sm btn-outline-danger" title="Delete">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-5">
+                            <i class="bi bi-inbox" style="font-size: 2rem;"></i>
+                            <p class="mt-2 mb-0">No employees found.</p>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% include 'hrms/partials/_pagination.html' %}
+    </div>
+</div>
+{% endblock %}

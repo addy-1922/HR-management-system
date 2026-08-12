@@ -1,0 +1,1 @@
+<span class="badge text-bg-{% if value == 'Approved' or value == 'Active' or value == 'Present' %}success{% elif value == 'Rejected' or value == 'Resigned' or value == 'Terminated' or value == 'Absent' %}danger{% elif value == 'Pending' or value == 'Half Day' or value == 'On Leave' %}warning{% elif value == 'Leave' %}info{% else %}secondary{% endif %}">{{ value }}</span>
